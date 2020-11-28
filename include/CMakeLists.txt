@@ -1,0 +1,5 @@
+include_directories(ec)
+include_directories(model)
+include_directories(planning)
+include_directories(schedule)
+include_directories(units)
