@@ -36,7 +36,8 @@ public:
 	friend std::ostream & operator<<(std::ostream & os, const buhlmann::planning::WorkPlanEntry & wpe) {
 		os << "WPE: ";
 		os << "Depth: " << wpe.depth << " (" << wpe.startDepth << ", " << wpe.endDepth << "), ";
-		os << "Time: " << wpe.bottomTime << " (" << wpe.arrivalTime << ", " << wpe.departureTime << ")";
+		os << "Time: " << wpe.bottomTime << " (" << wpe.departureTime << ") ";
+		os << *wpe.assignedGas;
 
 		return os;
 	}

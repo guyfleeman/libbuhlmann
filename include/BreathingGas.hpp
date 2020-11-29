@@ -5,6 +5,7 @@
 #ifndef LIBBUHLMAN_BREATHINGGAS_HPP
 #define LIBBUHLMAN_BREATHINGGAS_HPP
 
+#include <iostream>
 #include <memory>
 
 #include "Units.hpp"
@@ -51,6 +52,18 @@ public:
 	float getMaximumOperatingDepth();
 
 	float getEquivalentNarcosisDepth(float depth);
+
+	friend std::ostream & operator<<(std::ostream & os, const buhlmann::BreathingGas & wpe) {
+		if (wpe.getFracO2() == 21.0f && wpe.getFracHe() == 0.0f) {
+			os << "Breathing Gas: Air";
+		} else if (wpe.getFracHe() == 0.0f) {
+			os << "Breathing Gas: EAN" << (wpe.getFracO2() * 100.0f);
+		} else {
+			os << "Breathing Gas: TMX " << (wpe.getFracO2() * 100.0f) << "/" << (wpe.getFracHe() * 100.0f);
+		}
+
+		return os;
+	}
 
 	GasType_t getGasType();
 

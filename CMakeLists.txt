@@ -14,7 +14,11 @@ include_directories(include/planning)
 include_directories(include/schedule)
 include_directories(include/units)
 
-file(GLOB_RECURSE LIB_SOURCES src/*.cpp)
+file(GLOB_RECURSE LIB_SOURCES
+        ${PROJECT_SOURCE_DIR}/*.cpp
+        ${PROJECT_SOURCE_DIR}/model/*.cpp
+        ${PROJECT_SOURCE_DIR}/planning/*.cpp)
+
 file(GLOB_RECURSE LIB_HEADERS include/*.h include/*.hpp)
 
 add_library(libbuhlmann SHARED ${LIB_SOURCES} ${LIB_HEADERS})

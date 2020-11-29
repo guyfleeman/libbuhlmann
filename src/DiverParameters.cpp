@@ -7,11 +7,14 @@
 using namespace buhlmann;
 
 DiverParameters::DiverParameters(const float maxPPO2Std, const float maxPPO2Deco,
-								 const float descentRate, const float ascentRate) {
+								 const float descentRate, const float ascentRate,
+								 const float gradientFactorLo, const float gradientFactorHi) {
 	this->maxPPO2Std = maxPPO2Std;
 	this->maxPPO2Deco = maxPPO2Deco;
 	this->descentRate = descentRate;
 	this->ascentRate = ascentRate;
+	this->gradientFactorLo = gradientFactorLo;
+	this->gradientFactorHi = gradientFactorHi;
 }
 
 DiverParameters::~DiverParameters() {}
@@ -30,4 +33,12 @@ float DiverParameters::getMaxPPO2() {
 
 float DiverParameters::getMaxDecoPPO2() {
 	return maxPPO2Deco;
+}
+
+float DiverParameters::getGradientFactorLo() {
+	return gradientFactorLo;
+}
+
+float DiverParameters::getGradientFactorHi() {
+	return gradientFactorHi;
 }

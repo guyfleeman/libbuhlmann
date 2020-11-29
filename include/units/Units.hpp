@@ -11,11 +11,6 @@ constexpr float MINIMUM_SAFE_PPO2 = 0.18f;
 
 constexpr float SECONDS_PER_MINUTE = 60.0f;
 
-#include "Depth.hpp"
-#include "DepthRate.hpp"
-#include "Pressure.hpp"
-#include "PressureRate.hpp"
-#include "Temperature.hpp"
-#include "Time.hpp"
+constexpr float SURFACE_PRESSURE = 1.0f;
 
 #endif //LIBBUHLMAN_UNITS_HPP

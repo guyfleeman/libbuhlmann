@@ -20,7 +20,8 @@ enum O2EndMode {
 class DiverParameters {
 public:
 	DiverParameters(const float maxPPO2Std, const float maxPPO2Deco,
-	                const float descentRate, const float ascentRate);
+	                const float descentRate, const float ascentRate,
+					const float gradientFactorLo = 35.0f, const float gradientFactorHi = 85.0f);
 
 	virtual ~DiverParameters();
 
@@ -31,6 +32,10 @@ public:
 	float getAscentRate();
 
 	float getDescentRate();
+
+	float getGradientFactorLo();
+
+	float getGradientFactorHi();
 
 	void loadFromFile(std::string file) {
 
@@ -43,6 +48,8 @@ private:
 	float maxPPO2Deco{};
 	float descentRate{};
 	float ascentRate{};
+	float gradientFactorLo{};
+	float gradientFactorHi{};
 	O2EndMode o2EndMode = O2_NARCOTIC;
 };
 }
