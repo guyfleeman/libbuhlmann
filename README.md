@@ -19,6 +19,10 @@ make <target>
 
 `make planning_testing`
 
+### Data Vizualization
+
+`make data_viz`
+
 ### Additional Targets
 
 You can make additional executable targets by coping the planning testing section, and changing the names.

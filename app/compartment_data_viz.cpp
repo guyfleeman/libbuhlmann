@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <GL/glut.h>
 #include <iostream> 
-#include <string>
+#include <string.h>
 #include <cmath>
 #include "dataGrid.h"
 
@@ -31,9 +31,37 @@ void renderBitmapString(float x, float y, void *font,const char *string)
     }
 } 
 
+void drawRotatedLabel(char*s, int x,int y,int z)
+{
+	  glPushMatrix();
+    glEnable(GL_BLEND);
+glEnable(GL_LINE_SMOOTH);
+    
+    glScalef(.003, .0047, .003);
+    glRotatef(90, 0, 0, 1);
+    glTranslatef(1250, -125, 0);
+    glLineWidth(0.2);
+
+	  for (int i = 0; i < strlen(s); i++)
+	  {
+    		glutStrokeCharacter(GLUT_STROKE_ROMAN , s[i]);
+            glTranslatef(20, 0, 0);
+	  }
+	  glPopMatrix();
+}
+
 void display(void)
 {
     glClear( GL_COLOR_BUFFER_BIT);
+ 
+	glColor3f(1,1,1);
+    glLoadIdentity();                           // start with identity matrix
+    glOrtho(0.0, 20, 0.0, 20, -1.0, 1.0);   // setup a viewing grid
+    glMatrixMode(GL_MODELVIEW);   
+    char text[] = "Compartment Number";
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	drawRotatedLabel(text,1,1,0);
+    
 
     glMatrixMode(GL_PROJECTION);              // setup viewing projection
     glLoadIdentity();                           // start with identity matrix

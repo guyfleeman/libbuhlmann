@@ -36,6 +36,16 @@ file(GLOB_RECURSE TEST_PLANNING_HEADERS include/*.h include/*.hpp)
 add_executable(planning_testing ${TEST_PLANNING_SOURCES})
 target_link_libraries(planning_testing libbuhlmann)
 
+##################################################################################################
+# TEST VISUALIZATION
+##################################################################################################
+
+file(GLOB_RECURSE DATA_VISUALIZATION_SOURCES app/compartment_data_viz.cpp app/dataGrid.cpp)
+file(GLOB_RECURSE DATA_VISUALIZATION_HEADERS include/*.h include/*.hpp)
+
+add_executable(data_viz ${DATA_VISUALIZATION_SOURCES})
+target_link_libraries(data_viz GL glut)
+
 
 
 include(GNUInstallDirs)
