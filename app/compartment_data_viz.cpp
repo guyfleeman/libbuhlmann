@@ -33,21 +33,21 @@ void renderBitmapString(float x, float y, void *font,const char *string)
 
 void drawRotatedLabel(char*s, int x,int y,int z)
 {
-	  glPushMatrix();
+	glPushMatrix();
     glEnable(GL_BLEND);
-glEnable(GL_LINE_SMOOTH);
+    glEnable(GL_LINE_SMOOTH);
     
     glScalef(.003, .0047, .003);
     glRotatef(90, 0, 0, 1);
     glTranslatef(1250, -125, 0);
     glLineWidth(0.2);
 
-	  for (int i = 0; i < strlen(s); i++)
-	  {
-    		glutStrokeCharacter(GLUT_STROKE_ROMAN , s[i]);
-            glTranslatef(20, 0, 0);
-	  }
-	  glPopMatrix();
+    for (int i = 0; i < strlen(s); i++)
+    {
+        glutStrokeCharacter(GLUT_STROKE_ROMAN , s[i]);
+        glTranslatef(20, 0, 0);
+    }
+    glPopMatrix();
 }
 
 void display(void)
