@@ -35,7 +35,8 @@ set_target_properties(libbuhlmann PROPERTIES PUBLIC_HEADER include/mylib.h)
 ##################################################################################################
 
 target_include_directories(libbuhlmann PRIVATE ${HDRS})
-file(GLOB_RECURSE TEST_BUHLMANN_HEADERS include/*.h include/*.hpp)
+
+file(GLOB_RECURSE TEST_PLANNING_HEADERS include/*.h include/*.hpp)
 
 add_executable(planning_testing app/main_test_planning.cpp)
 target_link_libraries(planning_testing libbuhlmann)
@@ -45,9 +46,20 @@ target_link_libraries(planning_testing libbuhlmann)
 ##################################################################################################
 
 target_include_directories(libbuhlmann PRIVATE ${HDRS})
-file(GLOB_RECURSE TEST_PLANNING_HEADERS include/*.h include/*.hpp)
+
+file(GLOB_RECURSE TEST_BUHLMANN_HEADERS include/*.h include/*.hpp)
 
 add_executable(buhlmann_testing app/main_test_buhlmann.cpp)
 target_link_libraries(buhlmann_testing libbuhlmann)
+
+##################################################################################################
+# TEST VISUALIZATION
+##################################################################################################
+
+file(GLOB_RECURSE DATA_VISUALIZATION_SOURCES app/compartment_data_viz.cpp app/dataGrid.cpp)
+file(GLOB_RECURSE DATA_VISUALIZATION_HEADERS include/*.h include/*.hpp)
+
+add_executable(data_viz ${DATA_VISUALIZATION_SOURCES})
+target_link_libraries(data_viz GL glut)
 
 include(GNUInstallDirs)
