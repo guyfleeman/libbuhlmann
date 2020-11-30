@@ -6,7 +6,7 @@
 #define LIBBUHLMAN_WORKPLAN_HPP
 
 #include <iostream>
-#include <memory>
+//#include <memory>
 #include <vector>
 
 #include "DiverParameters.hpp"
@@ -16,13 +16,15 @@ namespace buhlmann {
 namespace planning {
 class WorkPlan {
 public:
-	explicit WorkPlan(std::shared_ptr<DiverParameters> ctx);
+	explicit WorkPlan(DiverParameters &ctx);
 
 	virtual ~WorkPlan();
 
 	void loadFromFile(std::string file);
 
 	void setGasses(std::vector<BreathingGas> gs);
+
+	const BreathingGas& getOptimizedGasForDepth(float d);
 
 	void loadGassesFromFile(std::string filename);
 
@@ -44,7 +46,7 @@ public:
 	std::vector<WorkPlanEntry> travelEntries;
 
 private:
-	std::shared_ptr<DiverParameters> diverCtx;
+	DiverParameters diverCtx;
 
 	std::vector<WorkPlanEntry> userEntries;
 	std::vector<WorkPlanEntry> completedEntries;

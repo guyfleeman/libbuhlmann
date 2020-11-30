@@ -8,7 +8,7 @@
 namespace buhlmann {
 namespace model {
 
-enum class BuhlmannModelVersion {
+enum class BuhlmannModelVersion : int {
 	ZHL_16C
 };
 

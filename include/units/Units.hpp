@@ -12,5 +12,7 @@ constexpr float MINIMUM_SAFE_PPO2 = 0.18f;
 constexpr float SECONDS_PER_MINUTE = 60.0f;
 
 constexpr float SURFACE_PRESSURE = 1.0f;
+constexpr float SURFACE_PCT_N2 = 0.78f;
+constexpr float SURFACE_PCT_HE = 0.0f;
 
 #endif //LIBBUHLMAN_UNITS_HPP

@@ -15,7 +15,7 @@
 using namespace buhlmann;
 using namespace buhlmann::planning;
 
-WorkPlan::WorkPlan(std::shared_ptr<DiverParameters> ctx) {
+WorkPlan::WorkPlan(DiverParameters &ctx) {
 	this->diverCtx = ctx;
 }
 
@@ -57,8 +57,8 @@ void WorkPlan::contextualize() {
 }
 
 void WorkPlan::resolveTravelIntermediates() {
-	float ascentRate = diverCtx->getAscentRate();
-	float descentRate = diverCtx->getDescentRate();
+	float ascentRate = diverCtx.getAscentRate();
+	float descentRate = diverCtx.getDescentRate();
 
 	const float TRAVEL_TIME_THRESH_S = 30;
 	std::shared_ptr<WorkPlanEntry> prevEntry = std::make_shared<WorkPlanEntry>(0.0f, 0.0f, nullptr);
@@ -66,9 +66,9 @@ void WorkPlan::resolveTravelIntermediates() {
 		float deltaDepth = prevEntry->depth - it->depth;
 		float transitionTimeS = 0.0f;
 		if (deltaDepth < 0) {
-			transitionTimeS = abs(deltaDepth) / diverCtx->getDescentRate() * SECONDS_PER_MINUTE;
+			transitionTimeS = abs(deltaDepth) / diverCtx.getDescentRate() * SECONDS_PER_MINUTE;
 		} else {
-			transitionTimeS = deltaDepth / diverCtx->getAscentRate() * SECONDS_PER_MINUTE;
+			transitionTimeS = deltaDepth / diverCtx.getAscentRate() * SECONDS_PER_MINUTE;
 		}
 
 		float depthApprox = (prevEntry->depth + it->depth) / 2.0f;
@@ -109,6 +109,22 @@ void WorkPlan::assignGasses() {
 
 		entry.assignGas(bg);
 	}
+}
+
+const BreathingGas& WorkPlan::getOptimizedGasForDepth(float d)
+{
+    BreathingGas &curBest(gasSchedule.front());
+    for (BreathingGas & bg : gasSchedule) {
+        if (bg.getMaximumOperatingDepth() < d) {
+            continue;
+        }
+
+        if (bg.getFracO2() > curBest.getFracO2()) {
+            curBest = bg;
+        }
+    }
+
+    return curBest;
 }
 
 /*

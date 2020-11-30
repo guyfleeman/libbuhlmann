@@ -17,15 +17,15 @@ using namespace buhlmann;
 
 BreathingGas::BreathingGas(const buhlmann::BreathingGas &bg) {
 	initializeFromRaw(bg.getFracO2(), bg.getFracHe(), bg.getFracH2());
-	this->diverCtx = bg.diverCtx;
+	diverCtx = bg.diverCtx;
 }
 
-BreathingGas::BreathingGas(const float fracO2, float const fracHe, const float fracH2, std::shared_ptr<DiverParameters> ctx) {
+BreathingGas::BreathingGas(DiverParameters &ctx, const float fracO2, float const fracHe, const float fracH2) {
+    diverCtx = ctx;
 	initializeFromRaw(fracO2, fracHe, fracH2);
-	this->diverCtx = ctx;
 }
 
-BreathingGas::BreathingGas(std::string cRep, shared_ptr<buhlmann::DiverParameters> ctx) {
+BreathingGas::BreathingGas(std::string cRep, DiverParameters &ctx) {
 	//std::replace(cRep.begin(), cRep.end(), '\r', '');
 
 	vector<string> components;
@@ -140,7 +140,7 @@ float BreathingGas::getMinimumOperatingDepth() {
 }
 
 float BreathingGas::getMaximumOperatingDepth() {
-	const float MAX_PPO2 = (gasType == DECO_GAS) ? diverCtx->getMaxDecoPPO2() : diverCtx->getMaxPPO2();
+	const float MAX_PPO2 = (gasType == DECO_GAS) ? diverCtx.getMaxDecoPPO2() : diverCtx.getMaxPPO2();
 	return ((MAX_PPO2 / fracO2) - surfaceATM) * FT_H2O_PER_ATM;
 }
 

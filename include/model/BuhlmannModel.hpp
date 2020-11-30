@@ -5,7 +5,8 @@
 #ifndef LIBBUHLMAN_BUHLMANNMODEL_HPP
 #define LIBBUHLMAN_BUHLMANNMODEL_HPP
 
-#include <memory>
+//#include <memory>
+#include <list>
 
 #include "BuhlmannCompartment.hpp"
 #include "BuhlmannModelVersion.hpp"
@@ -21,30 +22,47 @@ class Compartment;
 class Model {
 	//friend class Compartment;
 public:
-	Model(BuhlmannModelVersion version, std::shared_ptr<DiverParameters> ctx);
+	Model(BuhlmannModelVersion version, DiverParameters &ctx);
+
+	void initialize();
 
 	void clearModel();
 
-	void runForWorkPlan(std::shared_ptr<planning::WorkPlan> wp);
+	void runForWorkPlan(planning::WorkPlan &wp);
 
 	void runForWorkPlanEntry(planning::WorkPlanEntry &wpe);
 
-	float getCompositeCeiling();
+	float getCompositeCeilingAtm();
 
+	static float convertCompositeCeilingPressureToDepth(float compositeDepthAtm);
+
+    static float ambientPressureFromDepth(float d);
+
+	float getCompositeNoDecompressionTime();
 protected:
-	void updateCompartmentStatic(Compartment &cp);
+    void generateDecompressionSchedule(planning::WorkPlan &wp);
+
+    void setGradientFactorSlope(float startStopDepth, float endStopDepth);
+
+    float gradientFactor(float currentStopDepth);
+
+	static void updateCompartmentStatic(float depth, float time, Compartment &cp, const BreathingGas &bg);
 
 	void updateCompartmentTransient(Compartment &cp);
 
-	float updateLowLevelDiffusion(float ambientPressure, float rq, float igRatio);
+	static float updateLowLevelDiffusion_Depth(float depth, float rq, float internalGasRatio);
+
+	static float updateLowLevelDiffusion(float ambientPressure, float rq, float internalGasRatio);
 private:
-	float updateHaldaneGas(float pt0, float initialAlveolarPressure, float time, float halfLife);
+	static float updateHaldaneGas(float pt0, float initialAlveolarPressure, float time, float halfLife);
 
 	BuhlmannModelVersion algorithmVersion = BuhlmannModelVersion::ZHL_16C;
 
-	std::shared_ptr<DiverParameters> diverCtx;
+	DiverParameters diverCtx;
 
-	std::vector<Compartment> compartments;
+	std::array<Compartment, 17> compartments;
+
+	float gradientFactorSlope = 1.0f;
 };
 
 };

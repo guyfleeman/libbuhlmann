@@ -14,10 +14,13 @@ include_directories(include/planning)
 include_directories(include/schedule)
 include_directories(include/units)
 
+set(LIB_SRC_DIR ${PROJECT_SOURCE_DIR}/src)
+set(APP_SRC_DIR ${PROJECT_SOURCE_DIR}/app)
+
 file(GLOB_RECURSE LIB_SOURCES
-        ${PROJECT_SOURCE_DIR}/*.cpp
-        ${PROJECT_SOURCE_DIR}/model/*.cpp
-        ${PROJECT_SOURCE_DIR}/planning/*.cpp)
+        ${LIB_SRC_DIR}/*.cpp
+        ${LIB_SRC_DIR}/model/*.cpp
+        ${LIB_SRC_DIR}/planning/*.cpp)
 
 file(GLOB_RECURSE LIB_HEADERS include/*.h include/*.hpp)
 
@@ -32,14 +35,19 @@ set_target_properties(libbuhlmann PROPERTIES PUBLIC_HEADER include/mylib.h)
 ##################################################################################################
 
 target_include_directories(libbuhlmann PRIVATE ${HDRS})
-target_include_directories(libbuhlmann PRIVATE ${SRCS})
+file(GLOB_RECURSE TEST_BUHLMANN_HEADERS include/*.h include/*.hpp)
 
-file(GLOB_RECURSE TEST_PLANNING_SOURCES app/main_test_planning.cpp)
-file(GLOB_RECURSE TEST_PLANNING_HEADERS include/*.h include/*.hpp)
-
-add_executable(planning_testing ${TEST_PLANNING_SOURCES})
+add_executable(planning_testing app/main_test_planning.cpp)
 target_link_libraries(planning_testing libbuhlmann)
 
+##################################################################################################
+# TEST BUHLMANN
+##################################################################################################
 
+target_include_directories(libbuhlmann PRIVATE ${HDRS})
+file(GLOB_RECURSE TEST_PLANNING_HEADERS include/*.h include/*.hpp)
+
+add_executable(buhlmann_testing app/main_test_buhlmann.cpp)
+target_link_libraries(buhlmann_testing libbuhlmann)
 
 include(GNUInstallDirs)

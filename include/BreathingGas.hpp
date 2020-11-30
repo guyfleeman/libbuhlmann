@@ -6,7 +6,6 @@
 #define LIBBUHLMAN_BREATHINGGAS_HPP
 
 #include <iostream>
-#include <memory>
 
 #include "Units.hpp"
 #include "DiverParameters.hpp"
@@ -23,9 +22,9 @@ typedef enum GasType {
 
 class BreathingGas {
 public:
-	explicit BreathingGas(const float fracO2, const float fracHe = 0, const float fracH2 = 0, std::shared_ptr<DiverParameters> ctx = nullptr);
+	explicit BreathingGas(DiverParameters &ctx, const float fracO2, const float fracHe = 0, const float fracH2 = 0);
 
-	explicit BreathingGas(std::string cRep, std::shared_ptr<DiverParameters> ctx);
+	explicit BreathingGas(std::string cRep, DiverParameters &ctx);
 
 	explicit BreathingGas(const BreathingGas &bg);
 
@@ -79,7 +78,7 @@ private:
 	float fracHe;
 	float fracH2;
 
-	std::shared_ptr<DiverParameters> diverCtx;
+	DiverParameters diverCtx = DiverParameters(0, 0, 0, 0);
 
 	GasType_t gasType = BACK_GAS;
 };

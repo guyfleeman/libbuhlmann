@@ -29,6 +29,8 @@ public:
 
 	virtual ~WorkPlanEntry();
 
+	BreathingGas& getAssignedGas();
+
 	void assignGas(std::shared_ptr<BreathingGas> gas);
 
 	//std::ostream & operator<<(std::ostream & os) {

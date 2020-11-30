@@ -18,11 +18,11 @@ constexpr float CO2_PRESSURE = 0.0534f;
 
 typedef struct CompartmentContants {
 	float nitrogenHalfTime;
-	float nitrogenFast;
-	float nitrogenSlow;
+	float nitrogenA;
+	float nitrogenB;
 	float heliumHalfTime;
-	float heliumFast;
-	float heliumSlow;
+	float heliumA;
+	float heliumB;
 } CompartmentConstants_t;
 
 const CompartmentConstants_t ZHL_16C_CONSTANTS[ZHL_16C_COMPARTMENTS] = {

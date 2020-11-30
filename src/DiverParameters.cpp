@@ -42,3 +42,8 @@ float DiverParameters::getGradientFactorLo() {
 float DiverParameters::getGradientFactorHi() {
 	return gradientFactorHi;
 }
+
+DiverParameters::DiverParameters()
+{
+
+}

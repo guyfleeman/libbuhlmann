@@ -12,7 +12,7 @@ using namespace buhlmann::planning;
 using namespace std;
 
 int main() {
-	std::shared_ptr<DiverParameters> dp = std::make_shared<DiverParameters>(1.4f, 1.6f, 60.0f, 20.0f);
+	DiverParameters dp(1.4f, 1.6f, 60.0f, 20.0f);
 	WorkPlan wp = WorkPlan(dp);
 	wp.loadFromFile("../data/dp1.txt");
 	wp.contextualize();

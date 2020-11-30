@@ -66,6 +66,11 @@ WorkPlanEntry::WorkPlanEntry(std::string initStr, shared_ptr<buhlmann::Breathing
 
 WorkPlanEntry::~WorkPlanEntry() {}
 
+BreathingGas & WorkPlanEntry::getAssignedGas()
+{
+    return *assignedGas;
+}
+
 void WorkPlanEntry::assignGas(shared_ptr<buhlmann::BreathingGas> gas) {
 	this->assignedGas = gas;
 }

@@ -23,7 +23,9 @@ public:
 	                const float descentRate, const float ascentRate,
 					const float gradientFactorLo = 35.0f, const float gradientFactorHi = 85.0f);
 
-	virtual ~DiverParameters();
+    DiverParameters();
+
+    virtual ~DiverParameters();
 
 	float getMaxPPO2();
 
