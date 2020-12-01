@@ -75,8 +75,14 @@ void display(void)
     double width = squareSize[0];
     double height = squareSize[1];
 
-    //Create data squares
-    for (int j = 0; j < gridPtr -> getRowLen(); j++)
+    //Create data squares, starting by column
+    //If more than 10, just show last 10
+    int initTime = 0;
+    if (gridPtr -> getRowLen() > 10)
+    {
+        initTime = gridPtr -> getRowLen() - 10;
+    }
+    for (int j = initTime; j < gridPtr -> getRowLen(); j++)
     {
         for (int i = 0; i < gridPtr -> getColLen(); i++)
         {   //Set compartment values
@@ -89,18 +95,18 @@ void display(void)
             }
             color = gridPtr -> getColorAt(j, i);
             glColor3f(color[0], color[1], color[2]);
-            createSquare(double(j + gridPtr -> getLeftOffset()) * rowScaling, double(i + gridPtr -> getBottomOffset()) * colScaling, width, height);
+            createSquare(double(j + gridPtr -> getLeftOffset() - initTime) * rowScaling, double(i + gridPtr -> getBottomOffset()) * colScaling, width, height);
         }
         //Set time values
         glColor3f(1.0, 1.0, 1.0);
-        renderBitmapString(double(j + gridPtr -> getLeftOffset()) * rowScaling, 1, font, gridPtr -> getTimeAt(j));
+        renderBitmapString(double(j + gridPtr -> getLeftOffset() - initTime) * rowScaling, 1, font, gridPtr -> getTimeAt(j));
     }
     glColor3f(1.0, 1.0, 1.0);
     renderBitmapString(7.7, 0.1, font, "Time (s)");
     renderBitmapString(5.3, 0.5 + colScaling * (gridPtr -> getGridSize() - gridPtr -> getTopOffset()), font, "Compartment Loading Values");
 
     //Create colormap; 0.1 from 0 to 2
-    double i_max = 2.0;
+    double i_max = 1.6;
     double i_step = 0.1;
     double cmap_width = width / 2;
     double cmap_height = gridPtr -> getColLen() / (i_max / i_step);
@@ -126,7 +132,7 @@ int main(int argc, char **argv)
     gridPtr = &grid;
 
     fstream inFile;
-    inFile.open("../data/fake_tc1.txt", fstream::in);
+    inFile.open("../data/tc_rel.txt", fstream::in);
     inFile >> *gridPtr;
     inFile.close();
     glutInit(&argc, argv);

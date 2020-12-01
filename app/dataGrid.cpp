@@ -11,11 +11,11 @@ dataGrid::dataGrid()
 {
 	gridSize = 20.0;
 	dataRowLen = 0;
-	dataColLen = 16;
+	dataColLen = 17;
 	leftOffset = 1;
 	rightOffset = 2;
 	bottomOffset = 2;
-	topOffset = 2;
+	topOffset = 1;
 }
 
 double * dataGrid::dataToRGB(double data)
@@ -23,15 +23,15 @@ double * dataGrid::dataToRGB(double data)
 	static double color[3];
 	if (data <= 1)
 	{
-		color[0] = 1 - data;
+		color[0] = 0;
 		color[1] = data;
-		color[2] = 0;
+		color[2] = 1 - data;
 	}
 	else 
 	{
-		color[0] = 0;
+		color[0] = data - 1;
 		color[1] = 2 - data;
-		color[2] = data - 1;
+		color[2] = 0;
 	}
 	return color;
 }
@@ -122,10 +122,16 @@ fstream& operator>>(fstream& os, dataGrid & gridIn)
     }
 	gridIn.dataRowLen = cur_row;
 
-	gridIn.squareSize[0] = gridIn.gridSize / (gridIn.dataRowLen + gridIn.leftOffset + gridIn.rightOffset + 1);
+	int numTimes = gridIn.dataColLen;
+	if (gridIn.dataColLen > 10)
+	{
+		numTimes = 10;
+	}
+
+	gridIn.squareSize[0] = gridIn.gridSize / (numTimes + gridIn.leftOffset + gridIn.rightOffset + 1);
  	gridIn.squareSize[1] = gridIn.gridSize / (gridIn.dataColLen + gridIn.bottomOffset + gridIn.topOffset + 1);
 
-	gridIn.scalingVec[0] = gridIn.gridSize / (gridIn.dataRowLen + gridIn.leftOffset + gridIn.rightOffset);
+	gridIn.scalingVec[0] = gridIn.gridSize / (numTimes + gridIn.leftOffset + gridIn.rightOffset);
  	gridIn.scalingVec[1] = gridIn.gridSize / (gridIn.dataColLen + gridIn.bottomOffset + gridIn.topOffset);
 
     return os;
