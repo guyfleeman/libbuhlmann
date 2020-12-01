@@ -134,7 +134,7 @@ void Model::runExplicitLogForWorkPlan(planning::WorkPlan &wp)
                 float curPressure = dwpe.depth / FT_H2O_PER_ATM + SURFACE_PRESSURE;
 
                 tc_abs_file << max(cp.getCeiling(), 0.0f) << " ";
-                tc_rel_file << max(cp.getCeiling() / curPressure, 0.0f) << " ";
+                tc_rel_file << max(cp.getCeiling() / (curPressure * (SURFACE_PCT_N2 + SURFACE_PCT_HE)), 0.0f) << " ";
                 tc_ceil_file << max(convertCompositeCeilingPressureToDepth(cp.getCeiling()), 0.0f) << " ";
             }
             tc_abs_file << std::endl;
@@ -155,7 +155,7 @@ void Model::runExplicitLogForWorkPlan(planning::WorkPlan &wp)
 
 void Model::generateDecompressionSchedule(WorkPlan &wp)
 {
-    const float SURFACE_THRESHOLD = 2.5f;
+    const float SURFACE_THRESHOLD = 0.1f;
     const float STOP_DEPTH_INTERVAL = 10.0f;
     const float LAST_STOP_DEPTH = 10.0f;
     const float STOP_TIME_INTERVAL = 60.0f;
