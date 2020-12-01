@@ -3,7 +3,6 @@
 //
 
 #include <cmath>
-#include <utility>
 #include <fstream>
 
 #include "BuhlmannModel.hpp"
@@ -165,9 +164,14 @@ void Model::generateDecompressionSchedule(WorkPlan &wp)
     float nextDescritizedCeilingTarget = 0.0f;
 
     while (currentCeiling >= SURFACE_THRESHOLD) {
+        // calculate discritizations
+        // divers can't hold depth to fractions of a foot, certainly cant maintain an ascent rate
+        // this breaks off static stops for deco
         currentCeiling = convertCompositeCeilingPressureToDepth(getCompositeCeilingAtm());
         currentDescritizedCeilingTarget = floor(currentCeiling / STOP_DEPTH_INTERVAL) * STOP_DEPTH_INTERVAL + STOP_DEPTH_INTERVAL;
         nextDescritizedCeilingTarget = currentDescritizedCeilingTarget - STOP_DEPTH_INTERVAL;
+
+        // handle surfacing clearance
         if (nextDescritizedCeilingTarget < LAST_STOP_DEPTH) {
             nextDescritizedCeilingTarget = LAST_STOP_DEPTH;
         }
@@ -190,6 +194,7 @@ void Model::generateDecompressionSchedule(WorkPlan &wp)
         // run until we hit next target
         int iterations;
 
+        // run until we clear the stop
         // this terminating condition is straight forward and should be self-documenting
         for(iterations = 1; (currentDescritizedCeilingTarget != LAST_STOP_DEPTH && currentCeiling > nextDescritizedCeilingTarget)
         || (currentDescritizedCeilingTarget == LAST_STOP_DEPTH && currentCeiling > SURFACE_THRESHOLD); iterations++) {
@@ -208,6 +213,7 @@ void Model::generateDecompressionSchedule(WorkPlan &wp)
             currentCeiling = updatedCeiling;
         }
 
+        // update the stop runtime and add deco entry
         decoEntry.bottomTime = (float) (iterations - 1) * STOP_TIME_INTERVAL;
         runForWorkPlanEntry(decoEntry);
 
@@ -222,10 +228,12 @@ float Model::ambientPressureFromDepth(float d)
 
 float Model::updateLowLevelDiffusion_Depth(float depth, float rq, float internalGasRatio)
 {
+    // perform alveolar model update
     return updateLowLevelDiffusion(ambientPressureFromDepth(depth), rq, internalGasRatio);
 }
 
 float Model::updateLowLevelDiffusion(float ambientPressure, float rq, float internalGasRatio) {
+    // perform alveolar model update
 	return (ambientPressure - WATER_VAPOR_PRESSURE + ((1 - rq) / rq) * CO2_PRESSURE) * internalGasRatio;
 }
 
@@ -233,11 +241,13 @@ void Model::updateCompartmentStatic(float depth, float time, Compartment &cp, co
 {
 	float partialAlveolarN2, partialAlveolarHe;
 
+	// get diffusion information for relative depth and expected model loading
     partialAlveolarN2 = updateLowLevelDiffusion_Depth(depth, BUHLMANN_RQ, bg.getFracN2());
     partialAlveolarHe = updateLowLevelDiffusion_Depth(depth, BUHLMANN_RQ, bg.getFracHe());
     //std::cout << "\tLL P. Alv N2: " << partialAlveolarN2 << std::endl;
     //std::cout << "\tLL P. Alv He: " << partialAlveolarHe << std::endl;
 
+    // update compartment pressures
     //std::cout << "\tCPi P. N2: " << cp.getPressureN2() << std::endl;
     //std::cout << "\tCPi P. He: " << cp.getPressureHe() << std::endl;
 	cp.setPressureN2(updateHaldaneGas(cp.getPressureN2(), partialAlveolarN2, time,
@@ -250,7 +260,7 @@ void Model::updateCompartmentStatic(float depth, float time, Compartment &cp, co
 }
 
 void Model::updateCompartmentTransient(Compartment &cp) {
-
+    throw "UNIMPLEMENTED";
 }
 
 float Model::updateHaldaneGas(float pt0, float initialAlveolarPressure, float time, float halfLife) {

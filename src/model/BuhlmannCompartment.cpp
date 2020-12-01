@@ -36,6 +36,8 @@ void Compartment::setVersion(BuhlmannModelVersion version)
 
 float Compartment::getCeiling(float gradientFactorSlope) const
 {
+    // see the Buhlmann academic literature for formulation and experimentation
+
     float compositePressure = pressureN2 + pressureHe;
     float aFactor = (getConstants().nitrogenA * pressureN2 + getConstants().heliumA * pressureHe) / compositePressure;
     float bFactor = (getConstants().nitrogenB * pressureN2 + getConstants().heliumB * pressureHe) / compositePressure;
@@ -45,13 +47,6 @@ float Compartment::getCeiling(float gradientFactorSlope) const
     float safeAscentCeiling = gfCorrectionNumerator / gfCorrectionDenominator;
 
     return safeAscentCeiling;
-    /*
-    float stopN2, stopHe;
-    stopN2 = (pressureN2 - getConstants().nitrogenA) * getConstants().nitrogenB;
-    stopHe = (pressureHe - getConstants().heliumA) * getConstants().heliumB;
-
-    return std::max(stopN2, stopHe);
-     */
 }
 
 float Compartment::getNoDecompressionTime() const

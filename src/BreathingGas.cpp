@@ -130,6 +130,7 @@ float BreathingGas::getPPN2(float d) {
 }
 
 float BreathingGas::getMinimumOperatingDepth() {
+    // see diving training literature, esp technical nitrox/trimix
 	if (fracO2 >= MINIMUM_SAFE_PPO2) {
 		return 0;
 	}
@@ -140,11 +141,13 @@ float BreathingGas::getMinimumOperatingDepth() {
 }
 
 float BreathingGas::getMaximumOperatingDepth() {
+    // see formulation for max op depth in hypoxic technical ER trimix literature or training materials
 	const float MAX_PPO2 = (gasType == DECO_GAS) ? diverCtx.getMaxDecoPPO2() : diverCtx.getMaxPPO2();
 	return ((MAX_PPO2 / fracO2) - surfaceATM) * FT_H2O_PER_ATM;
 }
 
 float BreathingGas::getEquivalentNarcosisDepth(float depth) {
+    // see formulation for END in the tech diving literature
 	return (depth + (FT_H2O_PER_ATM * surfaceATM)) * (1 - getFracHe() - getFracH2()) - FT_H2O_PER_ATM;
 }
 

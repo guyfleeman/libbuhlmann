@@ -60,6 +60,7 @@ void WorkPlan::resolveTravelIntermediates() {
 	float ascentRate = diverCtx.getAscentRate();
 	float descentRate = diverCtx.getDescentRate();
 
+	// calculate travel times, and adjust entries and intermediate depths for on gas calculations
 	const float TRAVEL_TIME_THRESH_S = 30;
 	std::shared_ptr<WorkPlanEntry> prevEntry = std::make_shared<WorkPlanEntry>(0.0f, 0.0f, nullptr);
 	for (auto it = userEntries.begin(); it != userEntries.end(); it++) {
@@ -76,12 +77,15 @@ void WorkPlan::resolveTravelIntermediates() {
 		transitionEntry.type = TRAVEL_ENTRY;
 		transitionEntry.startDepth = prevEntry->depth;
 		transitionEntry.endDepth = it->depth;
+
+		// update times
 		transitionEntry.arrivalTime = prevEntry->departureTime;
 		transitionEntry.departureTime = transitionEntry.arrivalTime + transitionEntry.bottomTime;
 
 		it->arrivalTime += transitionEntry.bottomTime;
 		it->bottomTime -= transitionEntry.bottomTime;
 
+		// add entry
 		travelEntries.emplace_back(transitionEntry);
 		travelEntries.emplace_back(*it);
 

@@ -8,6 +8,9 @@
 namespace buhlmann {
 namespace model {
 
+/**
+ * available model versions
+ */
 enum class BuhlmannModelVersion : int {
 	ZHL_16C
 };

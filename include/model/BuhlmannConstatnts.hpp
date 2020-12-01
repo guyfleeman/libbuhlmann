@@ -8,14 +8,39 @@
 namespace buhlmann {
 namespace model {
 
+/**
+ * number of compartments in the ZHL 16-C model version
+ */
 constexpr int ZHL_16C_COMPARTMENTS = 17;
+
+/**
+ * number of compartments in the ZHL 16-B model version
+ */
 constexpr int ZHL_16B_COMPARTMENTS = 16;
+
+/**
+ * number of compartments in the ZHL 16-A model version
+ */
 constexpr int ZHL_16A_COMPARTMENTS = 16;
 
+/**
+ * buhlmann rq constant
+ */
 constexpr float BUHLMANN_RQ = 1.0f;
+
+/**
+ * ambient water vapor pressure
+ */
 constexpr float WATER_VAPOR_PRESSURE = 0.0627f;
+
+/**
+ * ambient CO2 pressure for alveolar sub-model
+ */
 constexpr float CO2_PRESSURE = 0.0534f;
 
+/**
+ * compartment constants
+ */
 typedef struct CompartmentContants {
 	float nitrogenHalfTime;
 	float nitrogenA;
@@ -25,6 +50,9 @@ typedef struct CompartmentContants {
 	float heliumB;
 } CompartmentConstants_t;
 
+/**
+ *
+ */
 const CompartmentConstants_t ZHL_16C_CONSTANTS[ZHL_16C_COMPARTMENTS] = {
 		/*N2-1/2t, N2 A   , N2 B   , He-1/2t ,  He A   , He B       Cpt No.*/
 		{4.0f,   1.2599f, 0.5240f, 1.51f,   1.7424f, 0.4245f}, /*  1  */
@@ -46,7 +74,9 @@ const CompartmentConstants_t ZHL_16C_CONSTANTS[ZHL_16C_COMPARTMENTS] = {
 		{635.0f, 0.2327f, 0.9653f, 240.03f, 0.5119f, 0.9267f}, /* 16  */
 };
 
-
+/**
+ *
+ */
 const CompartmentConstants_t ZHL_16B_DATA[ZHL_16B_COMPARTMENTS] = {
 		/*N2-1/2t, N2 A   , N2 B   , He-1/2t ,  He A   , He B       Cpt No.*/
 		{4.0f,   1.2599f, 0.5240f, 1.51f,   1.6189f, 0.4245f}, /*  1  */
@@ -68,6 +98,9 @@ const CompartmentConstants_t ZHL_16B_DATA[ZHL_16B_COMPARTMENTS] = {
 		{635.0f, 0.2327f, 0.9653f, 240.03f, 0.5119f, 0.9267f}, /* 16  */
 };
 
+/**
+ *
+ */
 const CompartmentConstants_t ZHL_16A_DATA[ZHL_16A_COMPARTMENTS] = {
 		/*N2-1/2t, N2 A   , N2 B   , He-1/2t ,  He A   , He B       Cpt No.*/
 		{4.0f,   1.2599f, 0.5240f, 1.51f,   1.6189f, 0.4245f}, /*  1  */
