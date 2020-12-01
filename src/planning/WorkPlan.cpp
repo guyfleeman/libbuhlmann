@@ -7,6 +7,7 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <omp.h>
 
 #include "DiverParameters.hpp"
 
@@ -30,6 +31,7 @@ void WorkPlan::loadFromFile(std::string filename) {
 		userEntries.emplace_back(line, nullptr);
 	}
 
+	#pragma omp parallel num_threads(std::thread::hardware_concurrency() / 2)
 	for (size_t i = 0; i < userEntries.size() - 1; i++) {
 		userEntries[i + 1].arrivalTime = userEntries[i].departureTime;
 		userEntries[i + 1].departureTime = userEntries[i + 1].arrivalTime + userEntries[i + 1].bottomTime;
@@ -63,6 +65,8 @@ void WorkPlan::resolveTravelIntermediates() {
 	// calculate travel times, and adjust entries and intermediate depths for on gas calculations
 	const float TRAVEL_TIME_THRESH_S = 30;
 	std::shared_ptr<WorkPlanEntry> prevEntry = std::make_shared<WorkPlanEntry>(0.0f, 0.0f, nullptr);
+	
+	#pragma omp parallel num_threads(std::thread::hardware_concurrency() / 2)
 	for (auto it = userEntries.begin(); it != userEntries.end(); it++) {
 		float deltaDepth = prevEntry->depth - it->depth;
 		float transitionTimeS = 0.0f;
