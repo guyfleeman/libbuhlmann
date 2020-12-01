@@ -33,4 +33,7 @@ int main() {
     bm.runForWorkPlan(wp);
 
     std::cout << wp << std::endl;
+
+    bm.clearModel();
+    bm.runExplicitLogForWorkPlan(wp);
 }

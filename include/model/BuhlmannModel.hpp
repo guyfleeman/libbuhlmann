@@ -32,6 +32,8 @@ public:
 
 	void runForWorkPlanEntry(planning::WorkPlanEntry &wpe);
 
+	void runExplicitLogForWorkPlan(planning::WorkPlan &wp);
+
 	float getCompositeCeilingAtm();
 
 	static float convertCompositeCeilingPressureToDepth(float compositeDepthAtm);

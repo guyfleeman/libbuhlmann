@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include <utility>
+#include <fstream>
 
 #include "BuhlmannModel.hpp"
 
@@ -97,6 +98,59 @@ void Model::runForWorkPlanEntry(WorkPlanEntry &wpe) {
     //std::cout << "Round NDL: " << getCompositeNoDecompressionTime() << std::endl;
     //std::cout << std::endl;
     //std::cout << std::endl;
+}
+
+void Model::runExplicitLogForWorkPlan(planning::WorkPlan &wp)
+{
+    ofstream tc_abs_file;
+    ofstream tc_rel_file;
+    ofstream tc_ceil_file;
+    ofstream total_ceil_atm_file;
+    ofstream total_ceil_ft_file;
+    tc_abs_file.open ("tc_abs.txt");
+    tc_rel_file.open ("tc_rel.txt");
+    tc_ceil_file.open ("tc_ceil.txt");
+    total_ceil_atm_file.open ("ceil_atm.txt");
+    total_ceil_ft_file.open ("ceil_ft.txt");
+
+    float time = 0.0f;
+    float LOG_INTERVAL_S = 15.0f;
+    for (WorkPlanEntry &wpe : wp.travelEntries) {
+        WorkPlanEntry dwpe(wpe);
+        dwpe.bottomTime = dwpe.bottomTime / LOG_INTERVAL_S;
+
+        int numIterations = (int) floor(wpe.bottomTime / LOG_INTERVAL_S);
+        for (int i = 0; i < numIterations; i++) {
+            time += LOG_INTERVAL_S;
+
+            for (auto & cp : compartments) {
+                updateCompartmentStatic(dwpe.depth, dwpe.bottomTime, cp, dwpe.getAssignedGas());
+            }
+
+            tc_abs_file << time << " ";
+            tc_rel_file << time << " ";
+            tc_ceil_file << time << " ";
+            for (auto & cp : compartments) {
+                float curPressure = dwpe.depth / FT_H2O_PER_ATM + SURFACE_PRESSURE;
+
+                tc_abs_file << max(cp.getCeiling(), 0.0f) << " ";
+                tc_rel_file << max(cp.getCeiling() / curPressure, 0.0f) << " ";
+                tc_ceil_file << max(convertCompositeCeilingPressureToDepth(cp.getCeiling()), 0.0f) << " ";
+            }
+            tc_abs_file << std::endl;
+            tc_rel_file << std::endl;
+            tc_ceil_file << std::endl;
+
+            total_ceil_atm_file << time << " " << getCompositeCeilingAtm() << std::endl;
+            total_ceil_ft_file << time << " " << convertCompositeCeilingPressureToDepth(getCompositeCeilingAtm()) << std::endl;
+        }
+    }
+
+    tc_abs_file.close();
+    tc_rel_file.close();
+    tc_ceil_file.close();
+    total_ceil_atm_file.close();
+    total_ceil_ft_file.close();
 }
 
 void Model::generateDecompressionSchedule(WorkPlan &wp)
