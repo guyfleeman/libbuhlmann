@@ -122,16 +122,10 @@ fstream& operator>>(fstream& os, dataGrid & gridIn)
     }
 	gridIn.dataRowLen = cur_row;
 
-	int numTimes = gridIn.dataColLen;
-	if (gridIn.dataColLen > 10)
-	{
-		numTimes = 10;
-	}
-
-	gridIn.squareSize[0] = gridIn.gridSize / (numTimes + gridIn.leftOffset + gridIn.rightOffset + 1);
+	gridIn.squareSize[0] = gridIn.gridSize / (gridIn.dataRowLen + gridIn.leftOffset + gridIn.rightOffset + 1);
  	gridIn.squareSize[1] = gridIn.gridSize / (gridIn.dataColLen + gridIn.bottomOffset + gridIn.topOffset + 1);
 
-	gridIn.scalingVec[0] = gridIn.gridSize / (numTimes + gridIn.leftOffset + gridIn.rightOffset);
+	gridIn.scalingVec[0] = gridIn.gridSize / (gridIn.dataRowLen + gridIn.leftOffset + gridIn.rightOffset);
  	gridIn.scalingVec[1] = gridIn.gridSize / (gridIn.dataColLen + gridIn.bottomOffset + gridIn.topOffset);
 
     return os;
