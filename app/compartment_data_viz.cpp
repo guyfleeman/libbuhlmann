@@ -77,6 +77,8 @@ void display(void)
 
     //Create data squares, starting by column
     //If more than 10, just show last 10
+    static int ctr = 0;
+    ctr = 0;
     for (int j = 0; j < gridPtr -> getRowLen(); j++)
     {
         for (int i = 0; i < gridPtr -> getColLen(); i++)
@@ -86,15 +88,18 @@ void display(void)
                 char buffer[20];
                 sprintf (buffer, "%d", i);
                 glColor3f(1.0, 1.0, 1.0);
-                renderBitmapString(width / 2, double(i + gridPtr -> getBottomOffset()) * colScaling, font, buffer);
+                renderBitmapString((width / 2) + 0.6, double(i + gridPtr -> getBottomOffset()) * colScaling, font, buffer);
             }
             color = gridPtr -> getColorAt(j, i);
             glColor3f(color[0], color[1], color[2]);
-            createSquare(double(j + gridPtr -> getLeftOffset()) * rowScaling, double(i + gridPtr -> getBottomOffset()) * colScaling, width, height);
+            createSquare(double(j + gridPtr -> getLeftOffset() * 2) * rowScaling, double(i + gridPtr -> getBottomOffset()) * colScaling, width, height);
         }
         //Set time values
         glColor3f(1.0, 1.0, 1.0);
-        renderBitmapString(double(j + gridPtr -> getLeftOffset()) * rowScaling, 1, font, gridPtr -> getTimeAt(j));
+        ctr++;
+        if (ctr % 20 == 0) {
+            renderBitmapString(double(j + gridPtr->getLeftOffset()) * rowScaling, 1, font, gridPtr->getTimeAt(j));
+        }
     }
     glColor3f(1.0, 1.0, 1.0);
     renderBitmapString(7.7, 0.1, font, "Time (s)");
@@ -103,18 +108,18 @@ void display(void)
     //Create colormap; 0.1 from 0 to 2
     double i_max = 1.6;
     double i_step = 0.1;
-    double cmap_width = width / 2;
-    double cmap_height = gridPtr -> getColLen() / (i_max / i_step);
+    double cmap_width = width;
+    double cmap_height = (gridPtr -> getColLen() / (i_max / i_step)) - 0.07;
     for (double i = 0; i < i_max + i_step; i += i_step)
     {
         color = gridPtr -> dataToRGB(i);
         glColor3f(color[0], color[1], color[2]);
-        createSquare(gridPtr -> getGridSize() - width, gridPtr -> getBottomOffset() + i / i_step * cmap_height,  cmap_width, cmap_height);
+        createSquare(gridPtr -> getGridSize() - width - 1.2, gridPtr -> getBottomOffset() + i / i_step * cmap_height,  cmap_width, cmap_height);
         if (((int) round(i / i_step)) % 5 == 0 )
         {
             char buffer[20];
             sprintf (buffer, "%0.1f", i);
-            renderBitmapString(gridPtr -> getGridSize() - 2 * width + 0.5, gridPtr -> getBottomOffset() + i / i_step * cmap_height, font, buffer);
+            renderBitmapString(gridPtr -> getGridSize() - 2 * width - 0.9, gridPtr -> getBottomOffset() + i / i_step * cmap_height, font, buffer);
         }
     }
     glFlush();
@@ -127,14 +132,15 @@ int main(int argc, char **argv)
     gridPtr = &grid;
 
     fstream inFile;
-    inFile.open("../data/tc_rel_150_90_a.txt", fstream::in);
+    //inFile.open("../data/tc_rel_150_90_a.txt", fstream::in);
+    inFile.open("../build/tc_rel.txt", fstream::in);
     inFile >> *gridPtr;
     inFile.close();
     glutInit(&argc, argv);
     glutInitDisplayMode ( GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
 
     glutInitWindowPosition(100,100);
-    glutInitWindowSize(600,400);
+    glutInitWindowSize(610,400);
     glutCreateWindow ("Compartment Loading Values");
 
     glClearColor(0.0, 0.0, 0.0, 0.0);         // black background
