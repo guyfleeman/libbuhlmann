@@ -27,16 +27,16 @@ void Model::initialize()
 }
 
 void Model::clearModel() {
-    std::cout << "Initializing State" << std::endl;
+    //std::cout << "Initializing State" << std::endl;
 
     if (algorithmVersion == BuhlmannModelVersion::ZHL_16C) {
         for (size_t i = 0; i < ZHL_16C_COMPARTMENTS; i++) {
             compartments[i].setPressureN2(updateLowLevelDiffusion_Depth(0.0f, BUHLMANN_RQ, SURFACE_PCT_N2));
             compartments[i].setPressureHe(updateLowLevelDiffusion_Depth(0.0f, BUHLMANN_RQ, SURFACE_PCT_HE));
-            std::cout << compartments[i] << std::endl;
+            //std::cout << compartments[i] << std::endl;
         }
 
-        std::cout << std::endl;
+        //std::cout << std::endl;
     }
 }
 
@@ -93,7 +93,7 @@ void Model::runForWorkPlanEntry(WorkPlanEntry &wpe) {
     //std::cout << std::endl;
 
     //std::cout << "Round Ceiling ATM: " << getCompositeCeilingAtm() << std::endl;
-    std::cout << "Round Ceiling: " << convertCompositeCeilingPressureToDepth(getCompositeCeilingAtm()) << std::endl;
+    //std::cout << "Round Ceiling: " << convertCompositeCeilingPressureToDepth(getCompositeCeilingAtm()) << std::endl;
     //std::cout << "Round NDL: " << getCompositeNoDecompressionTime() << std::endl;
     //std::cout << std::endl;
     //std::cout << std::endl;
@@ -178,8 +178,8 @@ void Model::generateDecompressionSchedule(WorkPlan &wp)
 
         // pick a gas
         auto &bg = const_cast<BreathingGas &>(wp.getOptimizedGasForDepth(currentDescritizedCeilingTarget));
-        std::cout << "chose optimized gas: " << bg << std::endl;
-        std::cout << "targeting " << currentDescritizedCeilingTarget;
+        //std::cout << "chose optimized gas: " << bg << std::endl;
+        //std::cout << "targeting " << currentDescritizedCeilingTarget;
 
         // make plan at target
         WorkPlanEntry decoEntry(currentDescritizedCeilingTarget, STOP_TIME_INTERVAL, std::make_shared<BreathingGas>(bg));
@@ -205,10 +205,10 @@ void Model::generateDecompressionSchedule(WorkPlan &wp)
                 updatedCeilingAtm = max(cp.getCeiling(), updatedCeilingAtm);
             }
 
-            std::cout << "ran depth " << decoEntry.depth << " for " << (float) iterations * STOP_TIME_INTERVAL << std::endl;
+            //std::cout << "ran depth " << decoEntry.depth << " for " << (float) iterations * STOP_TIME_INTERVAL << std::endl;
             //std::cout << "new ceiling ATM: " << updatedCeilingAtm << std::endl;
             float updatedCeiling = convertCompositeCeilingPressureToDepth(updatedCeilingAtm);
-            std::cout << "new ceiling: " << updatedCeiling << std::endl;
+            //std::cout << "new ceiling: " << updatedCeiling << std::endl;
 
             currentCeiling = updatedCeiling;
         }

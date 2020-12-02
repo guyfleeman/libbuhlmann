@@ -24,6 +24,7 @@ int main() {
     wp.loadFromFile("../data/dp1.txt");
     wp.loadGassesFromFile("../data/gs1.txt");
     wp.contextualize();
+    std::cout << std::endl << std::endl;
     std::cout << wp << std::endl;
 
     Model bm(BuhlmannModelVersion::ZHL_16C, dp);
@@ -32,6 +33,7 @@ int main() {
 
     bm.runForWorkPlan(wp);
 
+    std::cout << std::endl << std::endl;
     std::cout << wp << std::endl;
 
     bm.clearModel();
