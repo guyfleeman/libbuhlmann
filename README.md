@@ -14,8 +14,16 @@ DO NOT USE IT!!!
 mkdir build
 cd build
 cmake ..
-make <target>
+make all
 ```
+
+# Run Instruction
+
+Modify data/dp1.txt or data/gs1.txt as desired.
+
+Run `./buhlmann_testing`
+
+Run `./data_viz`
 
 ## Build Targets
 
