@@ -1,3 +1,15 @@
+/*
+ * Author: Liz Prucka 
+ * Class: ECE 6122
+ * Last Date Modified: 12/01/2020
+ *
+ * Description:
+ * dataGrid class header file.
+ *
+ * Defines the grid and individual squares size parameters, offsets, and
+ * colorscheme. Holds all values of the dive plan.  
+ */
+
 #pragma once
 #include <fstream>
 #include <vector>
@@ -35,4 +47,3 @@ class dataGrid
         vector<vector<double>> grid;
         vector<string> times;
 };
-

@@ -1,3 +1,15 @@
+/*
+ * Author: Liz Prucka
+ * Class: ECE 6122
+ * Last Date Modified: 12/01/2020
+ *
+ * Description:
+ * dataGrid class implementation.
+ *
+ * Defines the grid and individual squares size parameters, offsets, and
+ * colorscheme. Holds all values of the dive plan. *
+ */
+
 #include <math.h>	
 #include <stdio.h>
 #include <GL/glut.h>
@@ -12,7 +24,7 @@ dataGrid::dataGrid()
 	gridSize = 20.0;
 	dataRowLen = 0;
 	dataColLen = 17;
-	leftOffset = 7;
+	leftOffset = 2;
 	rightOffset = 2;
 	bottomOffset = 2;
 	topOffset = 1;
@@ -20,19 +32,27 @@ dataGrid::dataGrid()
 
 double * dataGrid::dataToRGB(double data)
 {
+    /* maps data value to color scheme.
+     * Gradient from 1.6 (red) to 0 (blue).
+     */
+
 	static double color[3];
+    color[0] = data/1.6;
+    color[1] = 0;
+    color[2] = 1 - data/1.6;
+    /*
 	if (data <= 1)
 	{
 		color[0] = 0;
 		color[1] = data;
-		color[2] = 1.0 - data;
+		color[2] = 1 - data;
 	}
 	else 
 	{
 		color[0] = data - 1;
-		color[1] = 1.6 - data;
+		color[1] = 2 - data;
 		color[2] = 0;
-	}
+	}*/
 	return color;
 }
 
@@ -95,6 +115,11 @@ int dataGrid::getTopOffset()
 
 fstream& operator>>(fstream& os, dataGrid & gridIn)
 {
+    /*
+     * read and store the plan in dataGrid.
+     * calculate square size and scaling values
+     */
+    
 	string num;
     //keep storing values from the text file so long as data exists:
 	int cur_col = 0;
@@ -122,11 +147,15 @@ fstream& operator>>(fstream& os, dataGrid & gridIn)
     }
 	gridIn.dataRowLen = cur_row;
 
-	gridIn.squareSize[0] = gridIn.gridSize / (gridIn.dataRowLen + gridIn.leftOffset * 4.5 + gridIn.rightOffset + 1);
- 	gridIn.squareSize[1] = gridIn.gridSize / (gridIn.dataColLen + gridIn.bottomOffset + gridIn.topOffset + 1);
+    gridIn.squareSize[0] = (gridIn.gridSize - gridIn.leftOffset - gridIn.rightOffset) / gridIn.dataRowLen;
+    gridIn.squareSize[1] = (gridIn.gridSize - gridIn.topOffset - gridIn.bottomOffset) / gridIn.dataColLen;
+	//gridIn.squareSize[0] = gridIn.gridSize / (gridIn.dataRowLen + gridIn.leftOffset + gridIn.rightOffset + 1);
+ 	//gridIn.squareSize[1] = gridIn.gridSize / (gridIn.dataColLen + gridIn.bottomOffset + gridIn.topOffset + 1);
 
-	gridIn.scalingVec[0] = gridIn.gridSize / (gridIn.dataRowLen + gridIn.leftOffset * 4.5 + gridIn.rightOffset);
- 	gridIn.scalingVec[1] = gridIn.gridSize / (gridIn.dataColLen + gridIn.bottomOffset + gridIn.topOffset);
+    gridIn.scalingVec[0] = gridIn.squareSize[0];
+    gridIn.scalingVec[1] = gridIn.squareSize[1];
+	//gridIn.scalingVec[0] = gridIn.gridSize / (gridIn.dataRowLen + gridIn.leftOffset + gridIn.rightOffset);
+ 	//gridIn.scalingVec[1] = gridIn.gridSize / (gridIn.dataColLen + gridIn.bottomOffset + gridIn.topOffset);
 
     return os;
 }
